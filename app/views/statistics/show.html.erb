@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @statistic %></h1>
+
+<h2>Statistics</h2>
+
+<table>
+  <% @aggregate.keys.each do |key| %>
+      <tr>
+        <td> <%= key %> </td>
+        <td> <%= @aggregate[key] %> </td>
+      </tr>
+  <% end %>
+</table>
+
+<h2>Students</h2>
+
+<table>
+  <tr>
+    <th>Student number</th>
+    <th> <%= link_to "credits total", statistic_path(@statistic, :order => "credits_total") %> </th>
+    <th> <%= link_to "credits registered 12-13", statistic_path(@statistic, :order => "credits_registered") %> </th>
+    <th> <%= link_to "credits completed 12-13", statistic_path(@statistic, :order => "credits_completed") %> </th>
+    <th> <%= link_to "tkt completed 12-13", statistic_path(@statistic, :order => "tkt_credits_completed") %> </th>
+    <th> <%= link_to "math completed 12-13", statistic_path(@statistic, :order => "math_credits_completed") %> </th>
+    <th> <%= link_to "other completed 12-13", statistic_path(@statistic, :order => "other_credits_completed") %> </th>
+  </tr>
+
+  <% @students.each do |student| %>
+      <tr>
+        <td><%= link_to student.student_number, student %></td>
+        <td><%= student.credits %></td>
+        <td><%= student.credits_year 2012 %></td>
+        <td><%= student.credits_completed_year 2012 %></td>
+        <td><%= student.credits_completed_year 2012, "58" %></td>
+        <td><%= student.credits_completed_year 2012, "57" %></td>
+        <td><%= student.other_credits_completed_year 2012 %></td>
+      </tr>
+  <% end %>
+</table>
+
+<%= link_to 'Back', statistics_path %>

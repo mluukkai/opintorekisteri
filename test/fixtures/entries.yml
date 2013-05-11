@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  name: MyString
+  credits: 9.99
+  grade: MyString
+  status: MyString
+  statuscode: 1
+  ordering: 
+  creditDate: MyString
+  date: 2013-05-10
+
+two:
+  code: MyString
+  name: MyString
+  credits: 9.99
+  grade: MyString
+  status: MyString
+  statuscode: 1
+  ordering: 
+  creditDate: MyString
+  date: 2013-05-10

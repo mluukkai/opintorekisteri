@@ -1,0 +1,23 @@
+<h1>Statistics</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <% @keys.each do |key| %>
+        <th><%= key %></th>
+    <% end %>
+  </tr>
+
+<% @statistics.each do |statistic| %>
+  <tr align="center">
+    <td><%= link_to statistic, statistic %></td>
+    <% @keys.each do |key| %>
+        <td><%= statistic.aggregate[key]  %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New instance', new_statistic_path %>

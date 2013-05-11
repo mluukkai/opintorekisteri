@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Code:</b>
+  <%= @entry.code %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @entry.name %>
+</p>
+
+<p>
+  <b>Credits:</b>
+  <%= @entry.credits %>
+</p>
+
+<p>
+  <b>Grade:</b>
+  <%= @entry.grade %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @entry.status %>
+</p>
+
+<p>
+  <b>Statuscode:</b>
+  <%= @entry.statuscode %>
+</p>
+
+<p>
+  <b>Ordering:</b>
+  <%= @entry.ordering %>
+</p>
+
+<p>
+  <b>Creditdate:</b>
+  <%= @entry.creditDate %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%= @entry.date %>
+</p>
+
+
+<%= link_to 'Edit', edit_entry_path(@entry) %> |
+<%= link_to 'Back', entries_path %>

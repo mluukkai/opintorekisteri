@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Opintorekisteri</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= link_to "entries", entries_path %>
+<%= link_to "students", students_path %>
+<%= link_to "statistics", statistics_path %>
+
+<%= yield %>
+
+</body>
+</html>

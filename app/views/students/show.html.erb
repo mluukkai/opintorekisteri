@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Student number:</b>
+  <%= @student.student_number %>
+</p>
+
+<p>
+  <b>Started:</b>
+  <%= @student.started %>
+</p>
+
+<p>
+  <b>Attribute:</b>
+  <%= @student.attrib %>
+</p>
+
+<p>
+  <b>Credits:</b>
+  <%= @student.credits %>
+</p>
+
+<p>
+  <b>Credits this year</b>
+  <%= @student.credits_after %>
+</p>
+
+<h2>succesfull</h2>
+
+<table>
+  <tr>
+    <th>Course</th>
+    <th>Credits</th>
+    <th>Grade</th>
+    <th>Date</th>
+    <th>Code</th>
+  </tr>
+
+  <% @student.success.each do |entry| %>
+      <tr>
+        <td><%= entry.name %></td>
+        <td><%= entry.credits %></td>
+        <td><%= entry.grade %></td>
+        <td><%= entry.date %></td>
+        <td><%= entry.statuscode %></td>
+      </tr>
+  <% end %>
+</table>
+
+<h2>failed</h2>
+
+<table>
+  <tr>
+    <th>Course</th>
+    <th>Credits</th>
+    <th>Grade</th>
+    <th>Date</th>
+    <th>Code</th>
+  </tr>
+
+  <% @student.failed.each do |entry| %>
+      <tr>
+        <td><%= entry.name %></td>
+        <td><%= entry.credits %></td>
+        <td><%= entry.grade %></td>
+        <td><%= entry.date %></td>
+        <td><%= entry.statuscode %></td>
+      </tr>
+  <% end %>
+</table>
+
+
+<%= link_to 'Edit', edit_student_path(@student) %> |
+<%= link_to 'Back', students_path %>
