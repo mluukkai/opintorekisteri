@@ -19,3 +19,19 @@ table, td, th {
 th {
     background-color: #cccccc;
 }
+
+div.container {
+	overflow: hidden;
+	width: 100%;
+}
+
+div.left {
+    padding-top: 120px;
+	width: 20%;
+	float: left;
+}
+
+div.right {
+	width: 80%;
+	float: right;
+}

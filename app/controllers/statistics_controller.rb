@@ -19,21 +19,71 @@ class StatisticsController < ApplicationController
     @statistic = Statistic.find(params[:id])
     @students = Student.belonging_to(@statistic.started, @statistic.attrib, @statistic.attrib2)
 
+    m = "credits_completed_year"
+    p = 2012
     if params[:order] == "credits_total"
+      m = "credits"
       @students.sort_by! { |s| s.credits }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.credits.to_i]
+        i += 1
+      end
+
     elsif params[:order] == "credits_registered"
+      m = "credits_year"
       @students.sort_by! { |s| s.credits_year(2012) }
-    elsif params[:order] == "credits_completed"
-      @students.sort_by! { |s| s.credits_completed_year(2012) }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.credits_year(2012).to_i]
+        i += 1
+      end
+
     elsif params[:order] == "tkt_credits_completed"
       @students.sort_by! { |s| s.credits_completed_year(2012, "58") }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.credits_completed_year(2012,"58").to_i ]
+        i += 1
+      end
+
     elsif params[:order] == "math_credits_completed"
-      @students.sort_by! { |s| s.credits_completed_year(2012, "57") }
+      @students.sort_by! { |s| s.credits_completed_year(2012, "57").to_i }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.credits_completed_year(2012,"57").to_i ]
+        i += 1
+      end
+
     elsif params[:order] == "other_credits_completed"
       @students.sort_by! { |s| s.other_credits_completed_year(2012) }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.other_credits_completed_year(2012).to_i]
+        i += 1
+      end
     else
       @students.sort_by! { |s| s.credits_completed_year(2012) }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+          @plot << [i, s.credits_completed_year(2012).to_i]
+        i += 1
+      end
     end
+
+    @sorted = params[:order] || "credits_completed_year"
 
     @students.reverse!
     @aggregate = Statistic.aggregate @students

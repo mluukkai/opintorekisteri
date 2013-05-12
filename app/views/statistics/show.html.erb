@@ -1,17 +1,53 @@
 <p id="notice"><%= notice %></p>
 
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['', 'Credits'],
+                <% @plot.each do |p| %>
+                <%= p %>,
+                <% end %>
+            ]);
+
+            var options = {
+                title:'sorted by <%= @sorted %>',
+                hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
+                vAxis:{title:'Credits', minValue:0, maxValue: <%= @plot.size %> },
+                legend:'none'
+            };
+
+            var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+    </script>
+
+<% end %>
+
+
 <h1><%= @statistic %></h1>
 
-<h2>Statistics</h2>
+<div class="container">
+  <div class="left">
+    <h3>Statistics</h3>
+    <table>
+      <% @aggregate.keys.each do |key| %>
+          <tr>
+            <td> <%= key %> </td>
+            <td> <%= @aggregate[key] %> </td>
+          </tr>
+      <% end %>
+    </table>
+  </div>
 
-<table>
-  <% @aggregate.keys.each do |key| %>
-      <tr>
-        <td> <%= key %> </td>
-        <td> <%= @aggregate[key] %> </td>
-      </tr>
-  <% end %>
-</table>
+  <div class="right">
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </div>
+</div>
 
 <h2>Students</h2>
 
