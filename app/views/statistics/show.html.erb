@@ -54,8 +54,9 @@
 
       <p><em>sort by clicking a colum header</em></p>
 
-      <table class="table table-striped">
+      <table >
         <tr>
+          <th></th>
           <th>Student number</th>
           <th> <%= link_to "credits total", statistic_path(@statistic, :order => "credits_total") %> </th>
           <th> <%= link_to "credits registered 12-13", statistic_path(@statistic, :order => "credits_registered") %> </th>
@@ -65,8 +66,10 @@
           <th> <%= link_to "other completed 12-13", statistic_path(@statistic, :order => "other_credits_completed") %> </th>
         </tr>
 
+        <% i=0 %>
         <% @students.each do |student| %>
             <tr>
+              <td><%= i+=1; i %></td>
               <td><%= link_to student.student_number, student %></td>
               <td><%= student.credits %></td>
               <td><%= student.credits_year 2012 %></td>
