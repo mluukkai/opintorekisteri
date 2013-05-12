@@ -15,7 +15,7 @@
 
             var options = {
                 hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
-                vAxis:{title:'', minValue:0, maxValue: <%= @plot.size %> },
+                vAxis:{title:'', minValue:0, maxValue: <%= @plot.last.last %> },
                 legend:'none'
             };
 
