@@ -12,6 +12,10 @@
  *= require_tree .
  */
 
+table {
+    margin: 10px;
+}
+
 table, td, th {
     border: 1px solid #cccccc;
 }

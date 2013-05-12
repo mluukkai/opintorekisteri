@@ -14,9 +14,8 @@
             ]);
 
             var options = {
-                title:'sorted by <%= @sorted %>',
                 hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
-                vAxis:{title:'Credits', minValue:0, maxValue: <%= @plot.size %> },
+                vAxis:{title:'', minValue:0, maxValue: <%= @plot.size %> },
                 legend:'none'
             };
 
@@ -29,52 +28,56 @@
 <% end %>
 
 
-<h1><%= @statistic %></h1>
+<h2><%= @statistic %></h2>
 
 <div class="container">
-  <div class="left">
-    <h3>Statistics</h3>
-    <table>
-      <% @aggregate.keys.each do |key| %>
-          <tr>
-            <td> <%= key %> </td>
-            <td> <%= @aggregate[key] %> </td>
-          </tr>
-      <% end %>
-    </table>
-  </div>
+  <div class="row">
+    <div class="span3">
+      <h3>Statistics</h3>
+      <table>
+        <% @aggregate.keys.each do |key| %>
+            <tr>
+              <td> <%= key %> </td>
+              <td> <%= @aggregate[key] %> </td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+    <div class="span9">
 
-  <div class="right">
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+      <div id="chart_div" style="height: 300px;"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <h2>Students sorted by <%= @sorted %> </h2>
+
+      <p><em>sort by clicking a colum header</em></p>
+
+      <table>
+        <tr>
+          <th>Student number</th>
+          <th> <%= link_to "credits total", statistic_path(@statistic, :order => "credits_total") %> </th>
+          <th> <%= link_to "credits registered 12-13", statistic_path(@statistic, :order => "credits_registered") %> </th>
+          <th> <%= link_to "credits completed 12-13", statistic_path(@statistic, :order => "credits_completed") %> </th>
+          <th> <%= link_to "tkt completed 12-13", statistic_path(@statistic, :order => "tkt_credits_completed") %> </th>
+          <th> <%= link_to "math completed 12-13", statistic_path(@statistic, :order => "math_credits_completed") %> </th>
+          <th> <%= link_to "other completed 12-13", statistic_path(@statistic, :order => "other_credits_completed") %> </th>
+        </tr>
+
+        <% @students.each do |student| %>
+            <tr>
+              <td><%= link_to student.student_number, student %></td>
+              <td><%= student.credits %></td>
+              <td><%= student.credits_year 2012 %></td>
+              <td><%= student.credits_completed_year 2012 %></td>
+              <td><%= student.credits_completed_year 2012, "58" %></td>
+              <td><%= student.credits_completed_year 2012, "57" %></td>
+              <td><%= student.other_credits_completed_year 2012 %></td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
   </div>
 </div>
 
-<h2>Students</h2>
-
-<p><em>sort by clicking a colum header</em></p>
-
-<table>
-  <tr>
-    <th>Student number</th>
-    <th> <%= link_to "credits total", statistic_path(@statistic, :order => "credits_total") %> </th>
-    <th> <%= link_to "credits registered 12-13", statistic_path(@statistic, :order => "credits_registered") %> </th>
-    <th> <%= link_to "credits completed 12-13", statistic_path(@statistic, :order => "credits_completed") %> </th>
-    <th> <%= link_to "tkt completed 12-13", statistic_path(@statistic, :order => "tkt_credits_completed") %> </th>
-    <th> <%= link_to "math completed 12-13", statistic_path(@statistic, :order => "math_credits_completed") %> </th>
-    <th> <%= link_to "other completed 12-13", statistic_path(@statistic, :order => "other_credits_completed") %> </th>
-  </tr>
-
-  <% @students.each do |student| %>
-      <tr>
-        <td><%= link_to student.student_number, student %></td>
-        <td><%= student.credits %></td>
-        <td><%= student.credits_year 2012 %></td>
-        <td><%= student.credits_completed_year 2012 %></td>
-        <td><%= student.credits_completed_year 2012, "58" %></td>
-        <td><%= student.credits_completed_year 2012, "57" %></td>
-        <td><%= student.other_credits_completed_year 2012 %></td>
-      </tr>
-  <% end %>
-</table>
-
-<%= link_to 'Back', statistics_path %>
