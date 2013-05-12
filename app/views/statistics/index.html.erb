@@ -1,6 +1,6 @@
 <h2>Statistics</h2>
 
-<table>
+<table class="table table-striped">
   <tr>
     <th></th>
     <% @keys.each do |key| %>
@@ -20,4 +20,6 @@
 
 <br />
 
-<%= link_to 'New instance', new_statistic_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_statistic_path,
+            :class => 'btn btn-primary' %>
