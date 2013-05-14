@@ -2,7 +2,9 @@
 
 <p>
   <b>Student number:</b>
-  <%= @student.student_number %>
+  <!--
+  <%= @student.student_number %>-->
+  Na
 </p>
 
 <p>
@@ -33,6 +35,7 @@
     <th>Credits</th>
     <th>Grade</th>
     <th>Date</th>
+    <th>Statucode</th>
     <th>Code</th>
   </tr>
 
@@ -43,6 +46,7 @@
         <td><%= entry.grade %></td>
         <td><%= entry.date %></td>
         <td><%= entry.statuscode %></td>
+        <td><%= entry.code %></td>
       </tr>
   <% end %>
 </table>

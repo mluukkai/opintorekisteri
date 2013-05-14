@@ -1,13 +1,11 @@
 class Statistic < ActiveRecord::Base
   attr_accessible :attrib, :attrib2, :started
 
-  def aggregate
-    Statistic.aggregate Student.belonging_to(started, attrib, attrib2)
+  def aggregate year=2012
+    Statistic.aggregate( Student.belonging_to(started, attrib, attrib2), year )
   end
 
-  def self.aggregate students
-
-    year = 2012
+  def self.aggregate students, year
 
     credits_year = 0
     credits_completed_year = 0
@@ -36,15 +34,20 @@ class Statistic < ActiveRecord::Base
     end
 
     {
-        :credits_year => (credits_year/active_students).round(2),
-        :credits_completed_year => (credits_completed_year/active_students).round(2),
-        :credits_tkt => (credits_tkt/active_students).round(2),
-        :credits_math => (credits_math/active_students).round(2),
-        :credits_other => ((credits_completed_year-credits_math-credits_tkt)/active_students).round(2),
+        :year => year,
+        :total => (credits_year/active_students).round(2),
+        :completed => (credits_completed_year/active_students).round(2),
+        :tkt => (credits_tkt/active_students).round(2),
+        :math => (credits_math/active_students).round(2),
+        :other => ((credits_completed_year-credits_math-credits_tkt)/active_students).round(2),
         :students => students.count,
         :fiftyfive => fiftyfive,
         :zeros => zeros,
     }
+  end
+
+  def already_started year
+    started[1..-1].to_i <= year
   end
 
   def to_s

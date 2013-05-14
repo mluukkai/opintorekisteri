@@ -3,4 +3,9 @@ class Entry < ActiveRecord::Base
 
   belongs_to :student
 
+  def self.unknown? entry
+    Entry.where( :student_number => entry.student_number,
+                 :date => entry.date,
+                 :grade => entry.grade).empty?
+  end
 end

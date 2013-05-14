@@ -17,10 +17,15 @@ class StatisticsController < ApplicationController
   # GET /statistics/1.json
   def show
     @statistic = Statistic.find(params[:id])
+
+    if params[:year]
+      @year = params[:year].to_i
+    else
+      @year = 2012
+    end
+
     @students = Student.belonging_to(@statistic.started, @statistic.attrib, @statistic.attrib2)
 
-    m = "credits_completed_year"
-    p = 2012
     if params[:order] == "credits_total"
       m = "credits"
       @students.sort_by! { |s| s.credits }
@@ -28,57 +33,57 @@ class StatisticsController < ApplicationController
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.credits.to_i]
+        @plot << [i, s.credits.to_i]
         i += 1
       end
 
     elsif params[:order] == "credits_registered"
       m = "credits_year"
-      @students.sort_by! { |s| s.credits_year(2012) }
+      @students.sort_by! { |s| s.credits_year(@year) }
 
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.credits_year(2012).to_i]
+        @plot << [i, s.credits_year(year).to_i]
         i += 1
       end
 
     elsif params[:order] == "tkt_credits_completed"
-      @students.sort_by! { |s| s.credits_completed_year(2012, "58") }
+      @students.sort_by! { |s| s.credits_completed_year(@year, "58") }
 
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.credits_completed_year(2012,"58").to_i ]
+        @plot << [i, s.credits_completed_year(@year, "58").to_i]
         i += 1
       end
 
     elsif params[:order] == "math_credits_completed"
-      @students.sort_by! { |s| s.credits_completed_year(2012, "57").to_i }
+      @students.sort_by! { |s| s.credits_completed_year(@year, "57").to_i }
 
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.credits_completed_year(2012,"57").to_i ]
+        @plot << [i, s.credits_completed_year(@year, "57").to_i]
         i += 1
       end
 
     elsif params[:order] == "other_credits_completed"
-      @students.sort_by! { |s| s.other_credits_completed_year(2012) }
+      @students.sort_by! { |s| s.other_credits_completed_year(@year) }
 
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.other_credits_completed_year(2012).to_i]
+        @plot << [i, s.other_credits_completed_year(@year).to_i]
         i += 1
       end
     else
-      @students.sort_by! { |s| s.credits_completed_year(2012) }
+      @students.sort_by! { |s| s.credits_completed_year(@year) }
 
       i = 1
       @plot = []
       @students.each do |s|
-          @plot << [i, s.credits_completed_year(2012).to_i]
+        @plot << [i, s.credits_completed_year(@year).to_i]
         i += 1
       end
     end
@@ -86,7 +91,7 @@ class StatisticsController < ApplicationController
     @sorted = params[:order] || "credits_completed_year"
 
     @students.reverse!
-    @aggregate = Statistic.aggregate @students
+    @aggregate = Statistic.aggregate @students, @year
 
     respond_to do |format|
       format.html # show.html.erb

@@ -49,12 +49,12 @@ class EntriesController < ApplicationController
     @entry.date = Date.new(yy, mm, dd)
 
     respond_to do |format|
-      if @entry.save
+      if Entry.unknown?(@entry) and @entry.save
         format.html { redirect_to @entry, notice: 'Entry was successfully created.' }
         format.json { render json: @entry, status: :created, location: @entry }
       else
         format.html { render action: "new" }
-        format.json { render json: @entry.errors, status: :unprocessable_entity }
+        format.json { render json: @entry, status: :created, location: @entry }
       end
     end
   end

@@ -8,17 +8,29 @@
     <% end %>
   </tr>
 
-<% @statistics.each do |statistic| %>
-  <tr align="center">
-    <td><%= link_to statistic, statistic %></td>
-    <% @keys.each do |key| %>
-        <td><%= statistic.aggregate[key]  %></td>
-    <% end %>
-  </tr>
-<% end %>
+  <% @statistics.each do |statistic| %>
+      <tr align="center">
+        <td><%= link_to statistic, statistic %></td>
+        <% @keys.each do |key| %>
+            <td><%= statistic.aggregate(2012)[key] %></td>
+        <% end %>
+      </tr>
+  <% end %>
+
+  <% @statistics.each do |statistic| %>
+      <% if statistic.already_started(2011) %>
+      <tr align="center">
+        <td><%= link_to statistic, statistic_path(statistic, :year => 2011) %></td>
+        <% @keys.each do |key| %>
+            <td><%= statistic.aggregate(2011)[key] %></td>
+        <% end %>
+      </tr>
+      <% end %>
+  <% end %>
+
 </table>
 
-<br />
+<br/>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_statistic_path,

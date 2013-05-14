@@ -10,15 +10,25 @@ class Student < ActiveRecord::Base
 
   def credits
     success.inject(0) do |sum, e|
-      sum += e.credits
+      sum += e.credits unless e.code.start_with?('0')
+      sum
     end
+  end
+
+  def not_a_course e
+    e.code.start_with?('0') or e.credits > 14
+  end
+
+  def likely_a_course e
+    not not_a_course(e) or e.name.include? "gradu"
   end
 
   def credits_after
     date1 = Date.new(2012,8,1)
     date2 = Date.new(2013,8,1)
     success_at_period(date1, date2).inject(0) do |sum, e|
-      sum += e.credits
+      sum += e.credits unless not not_a_course e
+      sum
     end
   end
 
@@ -26,7 +36,7 @@ class Student < ActiveRecord::Base
     date1 = Date.new(year,8,1)
     date2 = Date.new(year+1,8,1)
     success_at_period(date1, date2).inject(0) do |sum, e|
-      sum += e.credits if dep.nil? or e.code.starts_with? dep
+      sum += e.credits if ( dep.nil? or e.code.starts_with? dep) and likely_a_course e
       sum
     end
   end
@@ -35,7 +45,7 @@ class Student < ActiveRecord::Base
     date1 = Date.new(year,8,1)
     date2 = Date.new(year+1,8,1)
     completed_at_period(date1, date2).inject(0) do |sum, e|
-      sum += e.credits if dep.nil? or e.code.starts_with? dep
+      sum += e.credits if (dep.nil? or e.code.starts_with? dep ) and likely_a_course e
       sum
     end
   end
