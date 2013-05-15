@@ -16,11 +16,11 @@ class Student < ActiveRecord::Base
   end
 
   def not_a_course e
-    e.code.start_with?('0') or e.credits > 14
+    e.code.start_with?('0') or e.credits > 15
   end
 
   def likely_a_course e
-    not not_a_course(e) or e.name.include? "gradu"
+    not not_a_course(e) or ( e.name.include?("gradu") and not e.name.include?("ilman") )
   end
 
   def credits_after
