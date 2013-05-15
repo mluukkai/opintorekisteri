@@ -10,7 +10,7 @@ class Student < ActiveRecord::Base
 
   def credits
     success.inject(0) do |sum, e|
-      sum += e.credits unless e.code.start_with?('0')
+      sum += e.credits if likely_a_course e
       sum
     end
   end
