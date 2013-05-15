@@ -57,12 +57,12 @@
         <tr>
           <th></th>
           <th>Student number</th>
-          <th> <%= link_to "credits total", statistic_path(@statistic, :order => "credits_total") %> </th>
-          <th> <%= link_to "credits registered", statistic_path(@statistic, :order => "credits_registered") %> </th>
-          <th> <%= link_to "credits completed", statistic_path(@statistic, :order => "credits_completed") %> </th>
-          <th> <%= link_to "tkt completed", statistic_path(@statistic, :order => "tkt_credits_completed") %> </th>
-          <th> <%= link_to "math completed", statistic_path(@statistic, :order => "math_credits_completed") %> </th>
-          <th> <%= link_to "other completed", statistic_path(@statistic, :order => "other_credits_completed") %> </th>
+          <th> <%= link_to "credits total", statistic_path(@statistic, :year => @year, :order => "credits_total") %> </th>
+          <th> <%= link_to "credits registered", statistic_path(@statistic,:year => @year,  :order => "credits_registered") %> </th>
+          <th> <%= link_to "credits completed", statistic_path(@statistic, :year => @year,  :order => "credits_completed") %> </th>
+          <th> <%= link_to "tkt completed", statistic_path(@statistic, :year => @year, :order => "tkt_credits_completed") %> </th>
+          <th> <%= link_to "math completed", statistic_path(@statistic, :year => @year, :order => "math_credits_completed") %> </th>
+          <th> <%= link_to "other completed", statistic_path(@statistic, :year => @year, :order => "other_credits_completed") %> </th>
         </tr>
 
         <% i=0 %>
