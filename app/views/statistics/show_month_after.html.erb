@@ -1,0 +1,90 @@
+
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['', 'Credits'],
+                <% @plot.each do |p| %>
+                <%= p %>,
+                <% end %>
+            ]);
+
+            var options = {
+                title:'<%=@sorted%>',
+                hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
+                vAxis:{title:'', minValue:0, maxValue: <%= @plot.last.last %> },
+                legend:'none'
+            };
+
+            var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+    </script>
+
+<% end %>
+
+<h2><%= @statistic %></h2>
+
+<h3>statistics for <%=@year %> monts after start of studies</h3>
+
+<div class="container">
+  <div class="row">
+    <div class="span2">
+      <h3>Statistics</h3>
+      <table>
+        <% @aggregate.keys.select{ |k| k!="year"}.each do |key| %>
+            <tr>
+              <td> <%= key  %> </td>
+              <td> <%= @aggregate[key] %> </td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+    <div class="span10">
+      <div id="chart_div" style="height: 300px;"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <h2>Sorted by <%= @sorted %> </h2>
+
+      <p><em>sort by clicking a colum header</em></p>
+
+      <table >
+        <tr>
+          <th></th>
+          <th>Student number</th>
+          <th> <%= link_to "credits total", show_month_after_statistic_path(@statistic, :year => @year, :order => "credits_total") %> </th>
+          <th> <%= link_to "credits registered", show_month_after_statistic_path(@statistic,:year => @year,  :order => "credits_registered") %> </th>
+          <th> <%= link_to "credits completed", show_month_after_statistic_path(@statistic, :year => @year,  :order => "credits_completed") %> </th>
+          <th> <%= link_to "tkt completed", show_month_after_statistic_path(@statistic, :year => @year, :order => "tkt_credits_completed") %> </th>
+          <th> <%= link_to "math completed", show_month_after_statistic_path(@statistic, :year => @year, :order => "math_credits_completed") %> </th>
+          <th> <%= link_to "other completed", show_month_after_statistic_path(@statistic, :year => @year, :order => "other_credits_completed") %> </th>
+        </tr>
+
+        <% i=0 %>
+        <% @students.each do |student| %>
+            <tr>
+              <td><%= i+=1; i %></td>
+              <!--
+              <td><%= link_to student.student_number, student %></td>
+              -->
+              <td><%= link_to "Na", student %></td>
+              <td><%= student.credits %></td>
+              <td><%= student.credits_in_months @year %></td>
+              <td><%= student.credits_completed_in_months @year %></td>
+              <td><%= student.credits_completed_in_months @year, "58" %></td>
+              <td><%= student.credits_completed_in_months @year, "57" %></td>
+              <td><%= student.other_credits_completed_in_months @year %></td>
+            </tr>
+        <% end %>
+      </table>
+
+    </div>
+  </div>
+</div>
+

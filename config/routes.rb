@@ -4,6 +4,7 @@ Opintorekisteri::Application.routes.draw do
 
   resources :statistics do
     match :touch, :via => [:post], :on => :member
+    match :show_month_after, :via => [:get], :on => :member
   end
 
   resources :students
