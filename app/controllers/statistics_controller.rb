@@ -42,7 +42,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits.to_i]
+          @plot << [i, s.credits.to_i, s.id]
           i += 1
         end
 
@@ -53,7 +53,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_year(@year).to_i]
+          @plot << [i, s.credits_year(@year).to_i, s.id]
           i += 1
         end
 
@@ -63,7 +63,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_completed_year(@year, "58").to_i]
+          @plot << [i, s.credits_completed_year(@year, "58").to_i, s.id]
           i += 1
         end
 
@@ -73,7 +73,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_completed_year(@year, "57").to_i]
+          @plot << [i, s.credits_completed_year(@year, "57").to_i, s.id]
           i += 1
         end
 
@@ -83,7 +83,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.other_credits_completed_year(@year).to_i]
+          @plot << [i, s.other_credits_completed_year(@year).to_i, s.id]
           i += 1
         end
       else
@@ -92,7 +92,7 @@ class StatisticsController < ApplicationController
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_completed_year(@year).to_i]
+          @plot << [i, s.credits_completed_year(@year).to_i, s.id]
           i += 1
         end
       end
