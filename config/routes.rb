@@ -2,7 +2,9 @@ Opintorekisteri::Application.routes.draw do
   resources :posts
 
 
-  resources :statistics
+  resources :statistics do
+    match :touch, :via => [:post], :on => :member
+  end
 
   resources :students
 

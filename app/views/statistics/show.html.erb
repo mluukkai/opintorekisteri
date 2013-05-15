@@ -1,4 +1,3 @@
-<p id="notice"><%= notice %></p>
 
 <% content_for :head do %>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -82,6 +81,11 @@
             </tr>
         <% end %>
       </table>
+
+      <!--
+      If new data is entered to database you might need to
+      <%= button_to( "reset the broser cache", touch_statistic_path(@statistic)  ) %>
+      -->
     </div>
   </div>
 </div>

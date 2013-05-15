@@ -13,6 +13,13 @@ class StatisticsController < ApplicationController
     end
   end
 
+  def touch
+    @statistic = Statistic.find(params[:id])
+    @statistic.touch
+
+    redirect_to :back
+  end
+
   # GET /statistics/1
   # GET /statistics/1.json
   def show
