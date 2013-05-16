@@ -7,7 +7,10 @@ class ApplicationController < ActionController::Base
 
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|
-      username == "java2100" && password == "celebration"
+      if username == "gndi" and password == "vallilatablehockeyleague"
+        session[:gndi] = true
+      end
+      (username == "java2100" and password == "celebration") or (username == "gndi" and password == "vallilatablehockeyleague")
     end
   end
 end

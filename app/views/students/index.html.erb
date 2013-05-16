@@ -10,7 +10,7 @@
 
   <% @students.each do |student| %>
       <tr>
-        <td><%= link_to student.student_number, student %></td>
+        <td><%= link_to student_number(student), student %></td>
         <td><%= student.started %></td>
         <td><%= student.attrib %></td>
         <td><%= link_to 'Edit', edit_student_path(student) %></td>

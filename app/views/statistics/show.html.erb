@@ -86,10 +86,7 @@
         <% @students.each do |student| %>
             <tr>
               <td><%= i+=1; i %></td>
-              <!--
-              <td><%= link_to student.student_number, student %></td>
-              -->
-              <td><%= link_to "Na", student %></td>
+              <td><%= link_to student_number(student), student %></td>
               <td><%= student.credits %></td>
               <td><%= student.credits_year @year %></td>
               <td><%= student.credits_completed_year @year %></td>
