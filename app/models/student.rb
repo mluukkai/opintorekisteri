@@ -4,8 +4,9 @@ class Student < ActiveRecord::Base
   has_many :entries
 
   def self.belonging_to started, attrib, attrib2
-    return Student.includes(:entries).where("started == ? and attrib == ?", started, attrib) if attrib2.nil? or attrib2.empty?
-    Student.includes(:entries).where("started == ? and attrib == ? and attrib2 == ?", started, attrib, attrib2)
+    return Student.includes(:entries).where("started == ? and attrib LIKE ?", started, "%#{attrib}%") if attrib2.nil? or attrib2.empty?
+    #Student.includes(:entries).where("started == ? and attrib == ? and attrib2 == ?", started, attrib, attrib2)
+    Student.includes(:entries).where("started == ? and attrib LIKE ? and attrib2 LIKE ?", started, "%#{attrib}%", "%#{attrib2}%")
   end
 
   def credits

@@ -4,7 +4,7 @@ class StatisticsController < ApplicationController
   # GET /statistics
   # GET /statistics.json
   def index
-    @statistics = Statistic.all.sort_by { |s| s.attrib }
+    @statistics = Statistic.all.sort_by { |s| s.started }
     @keys = @statistics.first.aggregate.keys
 
     respond_to do |format|

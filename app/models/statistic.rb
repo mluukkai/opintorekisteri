@@ -26,7 +26,7 @@ class Statistic < ActiveRecord::Base
 
     active_students = students.count-zeros
 
-    if not students.nil? and students.first.attrib != "norm"
+    if not students.nil? and ( students.first.attrib == "mooc" or ( students.first.attrib.include?"kesa" and students.last.attrib.include?"kesa" ))
       credits_completed_year = credits_completed_year-(9*active_students)
       credits_tkt = credits_tkt-(9*active_students)
       credits_tktactive = credits_tktactive-(9*active_students)

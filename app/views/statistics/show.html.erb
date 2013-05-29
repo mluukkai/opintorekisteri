@@ -21,7 +21,8 @@
             var options = {
                 title:'<%=@sorted%>',
                 hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
-                vAxis:{title:'', minValue:0, maxValue: <%= @plot.last[1] %> },
+                vAxis:{title:'', minValue:0, maxValue: <%= 130 %> },
+                height:400,
                 pointSize: 3,
                 legend:'none'
             };
@@ -61,7 +62,7 @@
       </table>
     </div>
     <div class="span10">
-      <div id="chart_div" style="height: 300px;"></div>
+      <div id="chart_div"></div>
     </div>
   </div>
   <div class="row">
