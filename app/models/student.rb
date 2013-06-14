@@ -2,6 +2,8 @@ class Student < ActiveRecord::Base
   attr_accessible :attrib, :started, :student_number
 
   has_many :entries
+  has_many :memberships
+  has_many :groups, :through => :memberships
 
   def self.belonging_to started, attrib, attrib2
     return Student.includes(:entries).where("started == ? and attrib LIKE ?", started, "%#{attrib}%") if attrib2.nil? or attrib2.empty?
@@ -9,19 +11,30 @@ class Student < ActiveRecord::Base
     Student.includes(:entries).where("started == ? and attrib LIKE ? and attrib2 LIKE ?", started, "%#{attrib}%", "%#{attrib2}%")
   end
 
-  def credits
+  def member_of group
+    groups.include? group
+  end
+
+  def has_completed course
+    entries.each do |e|
+      return true if not e.name.nil? and e.name.include? course and e.statuscode != 10
+    end
+    false
+  end
+
+  # reason for useless parameter is to keep interface similar to other methods
+  def credits_total year = 0
     success.inject(0) do |sum, e|
       sum += e.credits if likely_a_course e
       sum
     end
   end
 
-  def not_a_course e
-    e.code.start_with?('0') or e.credits > 15
-  end
-
-  def likely_a_course e
-    not not_a_course(e) or ( e.name.include?("gradu") and not e.name.include?("ilman") )
+  def tkt_credits
+    success.inject(0) do |sum, e|
+      sum += e.credits if likely_a_course e and e.code.start_with?('58')
+      sum
+    end
   end
 
   def credits_after
@@ -33,13 +46,23 @@ class Student < ActiveRecord::Base
     end
   end
 
-  def credits_year year, dep = nil
+  # year
+
+  def credits_registered_year year, dep = nil
     date1 = Date.new(year,8,1)
     date2 = Date.new(year+1,8,1)
     success_at_period(date1, date2).inject(0) do |sum, e|
       sum += e.credits if ( dep.nil? or e.code.starts_with? dep) and likely_a_course e
       sum
     end
+  end
+
+  def tkt_credits_completed_year year
+    credits_completed_year(year, "58")
+  end
+
+  def math_credits_completed_year year
+    credits_completed_year(year, "57")
   end
 
   def credits_completed_year year, dep = nil
@@ -95,7 +118,16 @@ class Student < ActiveRecord::Base
     entries.where("statuscode == ? and date >= ? and date < ?", 4, date1, date2)
   end
 
+  # sisältää hyväksiluetut
   def success_at_period date1, date2
     entries.where("statuscode != ? and date >= ? and date < ?", 10, date1, date2)
+  end
+
+  def not_a_course e
+    e.code.start_with?('0') or e.credits > 15
+  end
+
+  def likely_a_course e
+    not not_a_course(e) or ( e.name.include?("gradu") and not e.name.include?("ilman") )
   end
 end

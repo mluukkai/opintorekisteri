@@ -39,3 +39,7 @@ div.right {
 	width: 80%;
 	float: right;
 }
+
+.current {
+    color: #ff0000;
+}

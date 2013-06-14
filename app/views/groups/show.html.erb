@@ -1,0 +1,133 @@
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['', 'Credits'],
+                <% @plot.each do |p| %>
+                <%="[#{p[0]},#{p[1]}]"%>,
+                <% end %>
+            ]);
+
+            var map = {
+                    <% @plot.each do |p| %>
+                    <%="#{p[0]}:#{p[2]}"%>,
+                    <% end %>
+                    };
+
+            var options = {
+                hAxis:{title:'', minValue:0, maxValue: <%= @plot.size %>},
+                vAxis:{title:'', minValue:0, maxValue: <%= 130 %> },
+                height:400,
+                pointSize:3,
+                legend:'none'
+            };
+
+            var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+
+            function selectHandler() {
+                var selectedItem = chart.getSelection()[0];
+                if (selectedItem) {
+                    var i = data.getValue(selectedItem.row, 0);
+                    open("http://rage.jamo.fi/students/" + map[i], '_self');
+                }
+            }
+
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+
+            chart.draw(data, options);
+        }
+
+    </script>
+
+<% end %>
+
+
+<p id="notice"><%= notice %></p>
+
+<h2><%= @group.name %></h2>
+
+<p>
+  <%= @group.description %>
+</p>
+
+
+<div class="container">
+  <div class="row">
+
+    <div class="span10">
+      <h3>Statistics</h3>
+
+      <p><em>change observed year by clicking the year</em></p>
+
+      <table class="table">
+        <tr>
+          <% @aggregate[2012].keys.each do |key| %>
+              <td> <%= key %> </td>
+          <% end %>
+        </tr>
+
+        <% (@group.start_year..2012).each do |y| %>
+            <tr class="<%= "success" if y == @year %>">
+              <% @aggregate[2012].keys.each do |key| %>
+                  <% if key==:year %>
+                      <td> <%= link_to "#{y}-#{y-1999}", group_path(@group, :year => y, :order => "credits_total") %>
+                  <% else %>
+                      <td> <%= @aggregate[y][key] %> </td>
+                  <% end %>
+              <% end %>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="span12">
+      <h3><%= @sorted %>  <%= "#{@year}-#{@year-1999}"%> </h3>
+      <div id="chart_div"></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h3>Students sorted by <%= @sorted %> <%= "#{@year}-#{@year-1999}"%> </h3>
+
+    <p><em>sort by clicking a column header</em></p>
+
+    <table class="table table-striped">
+      <tr>
+        <th></th>
+        <th>Student number</th>
+        <th> <%= link_to "credits total", group_path(@group, :year => @year, :order => "credits_total" ) %> </th>
+        <th> <%= link_to "credits registered year", group_path(@group, :year => @year, :order => "credits_registered_year"), :rel => 'tooltip', :title => "sisältää hyväksiluvut"  %> </th>
+        <th> <%= link_to "credits completed year", group_path(@group, :year => @year, :order => "credits_completed_year"), :rel => 'tooltip', :title => "ei sisällä hyväksilukuja"  %> </th>
+        <th> <%= link_to "tkt completed year", group_path(@group, :year => @year, :order => "tkt_credits_completed_year") %> </th>
+        <th> <%= link_to "math completed year", group_path(@group, :year => @year, :order => "math_credits_completed_year") %> </th>
+        <th> <%= link_to "other completed year", group_path(@group, :year => @year, :order => "other_credits_completed_year") %> </th>
+      </tr>
+
+      <% i=0 %>
+      <% @group.students.each.each do |student| %>
+          <tr>
+            <td><%= i+=1; i %></td>
+            <td><%= link_to student_number(student), student %></td>
+            <td><%= student.credits_total %></td>
+            <td><%= student.credits_registered_year @year %></td>
+            <td><%= student.credits_completed_year @year %></td>
+            <td><%= student.credits_completed_year @year, "58" %></td>
+            <td><%= student.credits_completed_year @year, "57" %></td>
+            <td><%= student.other_credits_completed_year @year %></td>
+          </tr>
+      <% end %>
+    </table>
+
+  </div>
+</div>
+</div>
+
+

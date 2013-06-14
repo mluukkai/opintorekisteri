@@ -1,4 +1,7 @@
 Opintorekisteri::Application.routes.draw do
+  resources :groups
+
+
   resources :posts
 
 

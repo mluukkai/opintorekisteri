@@ -37,7 +37,7 @@ class StatisticsController < ApplicationController
 
       if params[:order] == "credits_total"
         m = "credits"
-        @students.sort_by! { |s| s.credits }
+        @students.sort_by! { |s| s.credits_total }
 
         i = 1
         @plot = []
@@ -48,7 +48,7 @@ class StatisticsController < ApplicationController
 
       elsif params[:order] == "credits_registered"
         m = "credits_year"
-        @students.sort_by! { |s| s.credits_year(@year) }
+        @students.sort_by! { |s| s.credits_registered_year(@year) }
 
         i = 1
         @plot = []
@@ -58,22 +58,22 @@ class StatisticsController < ApplicationController
         end
 
       elsif params[:order] == "tkt_credits_completed"
-        @students.sort_by! { |s| s.credits_completed_year(@year, "58") }
+        @students.sort_by! { |s| s.tkt_credits_completed_year(@year) }
 
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_completed_year(@year, "58").to_i, s.id]
+          @plot << [i, s.tkt_credits_completed_year(@year).to_i, s.id]
           i += 1
         end
 
       elsif params[:order] == "math_credits_completed"
-        @students.sort_by! { |s| s.credits_completed_year(@year, "57").to_i }
+        @students.sort_by! { |s| s.math_credits_completed_year(@year).to_i }
 
         i = 1
         @plot = []
         @students.each do |s|
-          @plot << [i, s.credits_completed_year(@year, "57").to_i, s.id]
+          @plot << [i, s.math_credits_completed_year(@year).to_i, s.id]
           i += 1
         end
 
@@ -87,6 +87,7 @@ class StatisticsController < ApplicationController
           i += 1
         end
       else
+        #"credits_completed_year"
         @students.sort_by! { |s| s.credits_completed_year(@year) }
 
         i = 1
@@ -97,7 +98,7 @@ class StatisticsController < ApplicationController
         end
       end
 
-      @sorted = params[:order] || "credits_completed_year"
+      @sorted = params[:order]
 
       @students.reverse!
       @aggregate = Statistic.aggregate @students, @year
