@@ -28,6 +28,23 @@ class GroupsController < ApplicationController
 
   end
 
+  def path
+    @group = Group.find(params[:id])
+
+    students = @group.students.inject([]) { |set, s| set << s.progress }
+
+    @plot = []
+    (1..@group.students.first.months_studied).each do |m|
+      row = [ m ]
+      students.each do |s|
+        row << s[m-1]
+      end
+      @plot << row.to_s.chop[1..-1]
+    end
+
+    @progress = students
+  end
+
   def new
     @group = Group.new
   end

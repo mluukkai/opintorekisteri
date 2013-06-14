@@ -5,20 +5,28 @@
   <tr>
     <th style="width: 150px;"></th>
     <% @keys.each do |key| %>
-        <th><%= key %></th>
+        <th style="width: 60px;"><%= key %></th>
     <% end %>
+    <th style="width: 40px;"></th>
   </tr>
 
-  <% @groups.select{|g| g.start_year == starting_year}.each do |group| %>
+  <% @groups.select { |g| g.start_year == starting_year }.each do |group| %>
       <% (group.start_year.. 2012).each do |year| %>
           <tr align="center">
-            <td><%= link_to group.name, group_path(group, :order => "credits_completed_year", :year => year), :rel => 'tooltip', :title => group.description %></td>
+            <td>
+              <%= link_to group.name, group_path(group, :order => "credits_completed_year", :year => year), :rel => 'tooltip', :title => group.description %>
+            </td>
             <% @keys.each do |key| %>
-                <td><%= group.aggregate(year)[key] %></td>
+                <td align="center"><%= group.aggregate(year)[key] %></td>
             <% end %>
+            <td>
+              <div class="btn">
+                <%= link_to "paths", "#{group_path(group)}/path" %>
+              </div>
+            </td>
           </tr>
       <% end %>
-      <% unless group==@groups.select{|g| g.start_year == starting_year}.last %>
+      <% unless group==@groups.select { |g| g.start_year == starting_year }.last %>
           <td></td>
       <% end %>
   <% end %>

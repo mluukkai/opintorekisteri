@@ -22,7 +22,8 @@
                 vAxis:{title:'', minValue:0, maxValue: <%= 130 %> },
                 height:400,
                 pointSize:3,
-                legend:'none'
+                legend:'none',
+                chartArea: { top:20 }
             };
 
             var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
@@ -51,6 +52,10 @@
 <p>
   <%= @group.description %>
 </p>
+
+<div class="btn">
+<%= link_to "show study paths", "#{group_path(@group)}/path" %>
+</div>
 
 <div class="container">
   <div class="row">

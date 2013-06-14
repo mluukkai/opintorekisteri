@@ -1,0 +1,33 @@
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            <%="[#{@plot.first}]"%>,
+            <% @plot.each do |row| %>
+            <%="[#{row}]"%>,
+            <% end %>
+        ]);
+
+        var options = {
+            height:2000,
+            chartArea: { top:20 }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+<% end %>
+
+<h3>Progress of students in <%= @group.name %></h3>
+
+<div class="btn">
+<%= link_to "show group statistics", group_path(@group, :year => 2012, :order => "credits_completed_year") %>
+</div>
+
+<div id="chart_div"></div>

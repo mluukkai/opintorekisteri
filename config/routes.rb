@@ -1,9 +1,9 @@
 Opintorekisteri::Application.routes.draw do
-  resources :groups
-
+  resources :groups do
+    match :path, :via => [:get], :on => :member
+  end
 
   resources :posts
-
 
   resources :statistics do
     match :touch, :via => [:post], :on => :member
