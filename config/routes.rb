@@ -14,7 +14,7 @@ Opintorekisteri::Application.routes.draw do
 
   resources :entries
 
-  root :to => 'statistics#index'
+  root :to => 'groups#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
