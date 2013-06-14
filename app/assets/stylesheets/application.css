@@ -43,3 +43,7 @@ div.right {
 .current {
     color: #ff0000;
 }
+
+.content {
+    margin-left: 10px;
+}

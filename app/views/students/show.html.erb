@@ -1,3 +1,28 @@
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['', 'Credits'],
+            <% @plot.each do |p| %>
+            <%="[#{p[0]},#{p[1]}]"%>,
+            <% end %>
+        ]);
+
+        var options = {
+
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -11,23 +36,25 @@
 </p>
 
 <p>
-  <b>Attribute:</b>
-  <%= @student.attrib %>
-</p>
-
-<p>
   <b>Credits:</b>
-  <%= @student.credits %>
+  <%= @student.credits_total %>
 </p>
 
-<p>
-  <b>Credits this year</b>
-  <%= @student.credits_after %>
-</p>
+<p><b>Progress</b></p>
+
+<div id="chart_div"></div>
+
+<p><b>Statistic groups</b></p>
+
+<ul>
+  <% @student.groups.each do |group| %>
+      <li><%= link_to group.name, group_path(group, :order => "credits_completed_year", :year => 2012), :rel => 'tooltip', :title => group.description %></li>
+  <% end %>
+</ul>
 
 <h2>succesfull</h2>
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Course</th>
     <th>Credits</th>
@@ -37,7 +64,7 @@
     <th>Code</th>
   </tr>
 
-  <% @student.success.sort_by{ |s| s.date}.reverse.each do |entry| %>
+  <% @student.success.sort_by { |s| s.date }.reverse.each do |entry| %>
       <tr>
         <td><%= entry.name %></td>
         <td><%= entry.credits %></td>
@@ -51,7 +78,7 @@
 
 <h2>failed</h2>
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Course</th>
     <th>Credits</th>
