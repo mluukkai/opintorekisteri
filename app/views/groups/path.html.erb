@@ -10,12 +10,12 @@
         <% if @map.size>100 %>
 
         <% else %>
-        initialHeight = 1000
+            initialHeight = 1000
         <% end %>
 
         var options = {
             height:initialHeight,
-            chartArea:{ top:20, height:initialHeight - 20 },
+            chartArea:{ top:20, height:initialHeight - 100 },
             hAxis:{ title:'months'},
             vAxis:{ title:'credits'},
             legend:{ position:'none' }
