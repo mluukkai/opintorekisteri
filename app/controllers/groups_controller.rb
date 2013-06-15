@@ -33,22 +33,27 @@ class GroupsController < ApplicationController
 
     if stale?(:last_modified => @group.updated_at.utc, :etag => @group)
 
-      students = @group.students.inject([]) { |set, s| set << s.progress }
-
       if not Rails.cache.exist? "#{@group.name} paths"
-        plot = []
-        (1..@group.students.first.months_studied).each do |m|
+        students = @group.students.inject([]) { |set, s| set << s.progress }
+        plot = (1..@group.students.first.months_studied).inject([]) do |set, m|
           row = [m]
           students.each do |s|
             row << s[m-1]
           end
-          plot << row.to_s.chop[1..-1]
+          set << row.to_s.chop[1..-1]
         end
         Rails.cache.write "#{@group.name} paths", plot
       end
 
       @plot = Rails.cache.read "#{@group.name} paths"
 
+    end
+
+    @map = []
+    i = 1
+    @group.students.each do |s|
+      @map << [i,s.id]
+      i+=1
     end
 
   end
