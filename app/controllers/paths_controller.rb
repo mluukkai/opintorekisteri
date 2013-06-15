@@ -7,31 +7,33 @@ class PathsController < ApplicationController
   def show
     @path = Path.find(params[:id])
 
-    if stale?(:last_modified => @path.updated_at.utc, :etag => @path)
+    #if stale?(:last_modified => @path.updated_at.utc, :etag => @path)
 
-      if not Rails.cache.exist? "#{@path.started}paths"
-        path_map = []
-        @path.groups.each do |group|
-          students = group.students.inject([]) { |set, s| set << s.progress }
-          plot = (1..group.students.first.months_studied).inject([]) do |set, m|
-            row = [m]
-            students.each do |s|
-              row << s[m-1]
-            end
-            set << row.to_s.chop[1..-1]
+    if not Rails.cache.exist? "#{@path.started}paths"
+      path_map = []
+      @path.groups.each do |group|
+        students = group.students.inject([]) { |set, s| set << s.progress }
+        plot = (1..group.students.first.months_studied).inject([]) do |set, m|
+          row = [m]
+          students.each do |s|
+            row << s[m-1]
           end
-          path_map << plot
+          set << row.to_s.chop[1..-1]
         end
-        Rails.cache.write "#{@path.started}paths", path_map
+        path_map << plot
       end
-
-      @plots = Rails.cache.read "#{@path.started}paths"
-
-      @groups = @path.groups.inject([]) do |set, g|
-        set << g.name
-      end
-
+      Rails.cache.write "#{@path.started}paths", path_map
     end
+
+    @plots = Rails.cache.read "#{@path.started}paths"
+
+    @max = (@plots.flatten.to_s.gsub(/\"/,'').gsub(/\[/,'').gsub(/\]/,'')).split(',').map{|e|e.to_i}.max
+
+    @groups = @path.groups.inject([]) do |set, g|
+      set << g.name
+    end
+
+    #end
   end
 
   def new

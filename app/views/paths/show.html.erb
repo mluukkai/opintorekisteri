@@ -11,7 +11,7 @@
             height:initialHeight,
             chartArea:{ top:20, height:initialHeight - 100 },
             hAxis:{ title:'months'},
-            vAxis:{ title:'credits'},
+            vAxis:{ title:'credits', maxValue: <%= @max %> },
             legend:{ position:'none' }
         };
 
@@ -122,5 +122,4 @@
 <div id="now-selected"> </div>
 
 <div id="chart_div"></div>
-
 
