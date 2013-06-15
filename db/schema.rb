@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130615124235) do
+ActiveRecord::Schema.define(:version => 20130615225826) do
 
   create_table "entries", :force => true do |t|
     t.string   "code"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20130615124235) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "attrib2"
+    t.text     "month_credits"
   end
 
   add_index "students", ["student_number"], :name => "index_students_on_student_number"

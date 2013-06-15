@@ -1,5 +1,7 @@
 class Student < ActiveRecord::Base
-  attr_accessible :attrib, :started, :student_number
+  attr_accessible :attrib, :started, :student_number, :month_credits
+
+  serialize :month_credits
 
   has_many :entries
   has_many :memberships
@@ -93,13 +95,25 @@ class Student < ActiveRecord::Base
   # hack_begin
 
   def credits_in_months month
+    if not month_credits.nil? and month_credits[month]
+      return month_credits[month]
+    end
+
     start_year = started[1..-1].to_i
     date1 = Date.new(start_year, 8, 1)
     date2 = date1 + month.month
-    success_at_period(date1, date2).inject(0) do |sum, e|
+    cred = success_at_period(date1, date2).inject(0) do |sum, e|
       sum += e.credits if likely_a_course e
       sum
     end
+
+    if self.month_credits.nil?
+      self.month_credits = {}
+    end
+
+    self.month_credits[month] = cred
+    self.save
+    cred
   end
 
   def credits_completed_in_months month, dep = nil
