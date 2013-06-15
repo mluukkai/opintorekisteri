@@ -52,7 +52,7 @@ class GroupsController < ApplicationController
     @map = []
     i = 1
     @group.students.each do |s|
-      @map << [i,s.id]
+      @map << [i, s.id]
       i+=1
     end
 
