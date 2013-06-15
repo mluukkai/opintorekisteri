@@ -93,6 +93,8 @@
 
 <h3>Progress of students in <%= @group.name %></h3>
 
+<p><%= @group.description %></p>
+
 <div class="btn">
   <%= link_to "show group statistics", group_path(@group, :year => 2012, :order => "credits_completed_year") %>
 </div>
