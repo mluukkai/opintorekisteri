@@ -10,21 +10,29 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
     raise if params[:order].nil? or params[:year].nil?
 
-    @year = params[:year].to_i
+    if stale?(:last_modified => @group.updated_at.utc, :etag => @group)
 
-    @aggregate = {}
-    (@group.start_year..2012).each do |y|
-      @aggregate[y] = @group.aggregate y
-    end
+      @year = params[:year].to_i
 
-    @sorted = params[:order]
-    @students = @group.students.sort_by! { |s| s.send(@sorted, (@year)) }
+      if not Rails.cache.exist? "#{@group.name} stats"
+        aggregate = {}
+        (@group.start_year..2012).each do |y|
+          aggregate[y] = @group.aggregate y
+        end
+        Rails.cache.write "#{@group.name} stats", aggregate
+      end
+      @aggregate = Rails.cache.read "#{@group.name} stats"
 
-    i = 1
-    @plot = []
-    @students.each do |s|
-      @plot << [i, s.send(@sorted, (@year)).to_i, s.id]
-      i += 1
+      @sorted = params[:order]
+      @students = @group.students.sort_by! { |s| s.send(@sorted, (@year)) }
+
+      i = 1
+      @plot = []
+      @students.each do |s|
+        @plot << [i, s.send(@sorted, (@year)).to_i, s.id]
+        i += 1
+      end
+
     end
 
   end
