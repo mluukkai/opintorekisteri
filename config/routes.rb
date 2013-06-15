@@ -1,4 +1,7 @@
 Opintorekisteri::Application.routes.draw do
+  resources :paths
+
+
   resources :groups do
     match :path, :via => [:get], :on => :member
   end

@@ -5,13 +5,7 @@
         google.load("visualization", "1", {packages:["corechart"]});
         google.setOnLoadCallback(drawChart);
 
-        var initialHeight = 2000;
-
-        <% if @map.size>100 %>
-
-        <% else %>
-            initialHeight = 1000
-        <% end %>
+        var initialHeight = 1000;
 
         var options = {
             height:initialHeight,
@@ -23,19 +17,20 @@
 
         var first = 0;
 
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                <%="[#{@plot.first}]"%>,
-                <% @plot.each do |row| %>
-                <%="[#{row}]"%>,
-                <% end %>
-            ]);
+        var show_number = 0;
 
-            var map = {
-                    <% @map.each do |p| %>
-                    <%="#{p[0]}:#{p[1]}"%>,
+        function drawChart() {
+            var data = [];
+
+            <% (0..@plots.length-1).each do |i| %>
+                data.push(google.visualization.arrayToDataTable([
+                    <%="[#{@plots[i].first}]"%>,
+                    <% @plots[i].each do |row| %>
+                    <%="[#{row}]"%>,
                     <% end %>
-                    };
+                ]));
+            <% end %>
+
 
             var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
@@ -43,14 +38,13 @@
                 var selectedItem = chart.getSelection()[0];
                 if (selectedItem) {
                     var i = selectedItem['column']
-
-                    open("http://rage.jamo.fi/students/" + map[i], '_self');
                 }
             }
 
             google.visualization.events.addListener(chart, 'select', selectHandler);
 
             if (first == 0) {
+                $("#b0").addClass("btn-success")
 
                 $('#plus').click(function (e) {
                     options['height'] = options['height'] + 20;
@@ -62,6 +56,17 @@
                 $('#minus').click(function (e) {
                     options['height'] = options['height'] - 20;
                     options['chartArea']['height'] = options['chartArea']['height'] - 20;
+                    drawChart();
+                    e.preventDefault();
+                });
+
+                $('.select').click(function (e) {
+                    var i = (e.target.id).substring(1);
+                    show_number = i;
+
+                    $(".select").removeClass("btn-success");
+                    $("#"+e.target.id).addClass("btn-success");
+
                     drawChart();
                     e.preventDefault();
                 });
@@ -83,21 +88,26 @@
                 first++;
             }
 
-            chart.draw(data, options);
+            chart.draw(data[show_number], options);
         }
     </script>
 
 <% end %>
 
-<h3>Progress of students in <%= @group.name %></h3>
+<p id="notice"><%= notice %></p>
 
-<p><%= @group.description %></p>
+<h3>
+  <%= @path.started %>
+</h3>
 
-<div class="btn">
-  <%= link_to "show group statistics", group_path(@group, :year => 2012, :order => "credits_completed_year") %>
-</div>
-
-<p></p>
+<p>
+<ul>
+  <% i = -1 %>
+  <% @path.groups.each do |g| %>
+      <a href="#" class="btn select" id="b<%= i+=1 %>" rel="tooltip" title="<%= g.description %>"> <%= g.name %></a>
+  <% end %>
+</ul>
+</p>
 
 <div class="btn">
   <a href="#" id="plus">+</a>
@@ -109,4 +119,8 @@
 
 <p><em>you can also use + and - of keyboard to scale the figure</em></p>
 
+<div id="now-selected"> </div>
+
 <div id="chart_div"></div>
+
+

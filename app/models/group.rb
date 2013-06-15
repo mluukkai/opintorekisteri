@@ -4,6 +4,11 @@ class Group < ActiveRecord::Base
   has_many :memberships
   has_many :students, :through => :memberships
 
+  def self.started year
+    start_year = year[1..-1].to_i
+    Group.where :start_year => start_year
+  end
+
   def aggregate year
     if not Rails.cache.exist? "#{name} #{year}"
       Rails.cache.write "#{name} #{year}", Group.aggregate(students, year)

@@ -1,0 +1,24 @@
+<h1>Student study paths</h1>
+
+<% @paths.reverse.each do |path| %>
+
+    <h3><%= link_to path.started, path %></h3>
+
+    <div class="btn">
+      <%= link_to "aggregate", path %>
+    </div>
+
+    Includes graphs for all the subgroups
+
+    <p></p>
+
+    <% path.groups.each do |g| %>
+        <div class="btn">
+          <%= link_to g.name, "#{group_path(g)}/path", :rel=>"tooltip", :title=>g.description %>
+        </div>
+    <% end %>
+<% end %>
+
+</table>
+
+
