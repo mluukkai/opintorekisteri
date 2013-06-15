@@ -1,7 +1,7 @@
 class PathsController < ApplicationController
 
   def index
-    @paths = Path.all
+    @paths = Path.all.sort_by{ |p| p.started }
   end
 
   def show

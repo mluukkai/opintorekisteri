@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  caches_action :index
 
   def index
     @groups = Group.all.sort_by { |g| g.name }
