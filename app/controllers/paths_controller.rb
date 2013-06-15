@@ -7,33 +7,33 @@ class PathsController < ApplicationController
   def show
     @path = Path.find(params[:id])
 
-    #if stale?(:last_modified => @path.updated_at.utc, :etag => @path)
+    if stale?(:last_modified => @path.updated_at.utc, :etag => @path)
 
-    if not Rails.cache.exist? "#{@path.started}paths"
-      path_map = []
-      @path.groups.each do |group|
-        students = group.students.inject([]) { |set, s| set << s.progress }
-        plot = (1..group.students.first.months_studied).inject([]) do |set, m|
-          row = [m]
-          students.each do |s|
-            row << s[m-1]
+      if not Rails.cache.exist? "#{@path.started}paths"
+        path_map = []
+        @path.groups.each do |group|
+          students = group.students.inject([]) { |set, s| set << s.progress }
+          plot = (1..group.students.first.months_studied).inject([]) do |set, m|
+            row = [m]
+            students.each do |s|
+              row << s[m-1]
+            end
+            set << row.to_s.chop[1..-1]
           end
-          set << row.to_s.chop[1..-1]
+          path_map << plot
         end
-        path_map << plot
+        Rails.cache.write "#{@path.started}paths", path_map
       end
-      Rails.cache.write "#{@path.started}paths", path_map
+
+      @plots = Rails.cache.read "#{@path.started}paths"
+
+      @max = (@plots.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
+
+      @groups = @path.groups.inject([]) do |set, g|
+        set << g.name
+      end
+
     end
-
-    @plots = Rails.cache.read "#{@path.started}paths"
-
-    @max = (@plots.flatten.to_s.gsub(/\"/,'').gsub(/\[/,'').gsub(/\]/,'')).split(',').map{|e|e.to_i}.max
-
-    @groups = @path.groups.inject([]) do |set, g|
-      set << g.name
-    end
-
-    #end
   end
 
   def new
