@@ -25,6 +25,8 @@ class Group < ActiveRecord::Base
     credits_math = 0
     zerotkt = 0
     credits_tktactive = 0
+    ag = 0
+    graded = 0
 
     students.each do |s|
       credits_year += s.credits_registered_year year
@@ -33,13 +35,19 @@ class Group < ActiveRecord::Base
       credits_math += s.math_credits_completed_year(year)
       fiftyfive += 1 if s.credits_registered_year(year) > 54
       zeros += 1 if s.credits_registered_year(year) == 0
+      grade = s.average_grade
+      if grade>0
+        ag += grade
+        graded += 1
+      end
+
     end
 
     active_students = students.count-zeros
 
     {
         :year => year,
-        :total => (credits_year/active_students).round(2),
+        :registered => (credits_year/active_students).round(2),
         :completed => (credits_completed_year/active_students).round(2),
         :tkt => (credits_tkt/active_students).round(2),
         :math => (credits_math/active_students).round(2),
@@ -47,6 +55,7 @@ class Group < ActiveRecord::Base
         :students => students.count,
         :fiftyfive => fiftyfive,
         :zeros => zeros,
+        :grade => graded>0 ? (ag/graded).round(2) : 0
     }
   end
 end

@@ -6,6 +6,12 @@ class GroupsController < ApplicationController
     @keys = @groups.first.aggregate(2012).keys
   end
 
+  def touch
+    expire_action :action => :index
+
+    redirect_to :action => :index
+  end
+
   def show
     @group = Group.find(params[:id])
     raise if params[:order].nil? or params[:year].nil?

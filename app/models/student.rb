@@ -60,6 +60,19 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def average_grade
+    credits = 0
+    number_sum = 0
+    entries.each do |e|
+      if likely_a_course(e) and (e.grade.to_i) > 0
+        number_sum += e.grade.to_i * e.credits
+        credits += e.credits
+      end
+    end
+    return 0 if credits == 0
+    number_sum / credits
+  end
+
   # year
 
   def credits_registered_year year, dep = nil
