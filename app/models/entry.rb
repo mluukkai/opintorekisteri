@@ -6,6 +6,7 @@ class Entry < ActiveRecord::Base
   def self.unknown? entry
     Entry.where( :student_number => entry.student_number,
                  :date => entry.date,
+                 :name => entry.name,
                  :grade => entry.grade).empty?
   end
 end
