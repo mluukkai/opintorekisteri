@@ -129,6 +129,21 @@ class Student < ActiveRecord::Base
     cred
   end
 
+  def credits_in_months_starting month, starting
+    if not month_credits.nil? and month_credits[month]
+      return month_credits[month]
+    end
+
+    upto = starting + month.month
+    cred = success_at_period(starting, upto).inject(0) do |sum, e|
+      sum += e.credits if likely_a_course e
+      sum
+    end
+    cred
+  end
+
+  ## not needed
+
   def credits_completed_in_months month, dep = nil
     start_year = started[1..-1].to_i
     date1 = Date.new(start_year, 8, 1)
@@ -143,7 +158,7 @@ class Student < ActiveRecord::Base
     credits_completed_in_months(months) - credits_completed_in_months(months, "58") -credits_completed_in_months(months, "57")
   end
 
-  # hack_end
+  # not needed_end
 
   def success
     entries.where("statuscode != ? ", 10)

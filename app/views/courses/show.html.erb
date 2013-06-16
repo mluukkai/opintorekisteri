@@ -1,0 +1,119 @@
+<% content_for :head do %>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+
+        var initialHeight = 2000;
+
+        <% if @map.size>100 %>
+
+        <% else %>
+            initialHeight = 1000
+        <% end %>
+
+        var options = {
+            height:initialHeight,
+            chartArea:{ top:20, height:initialHeight - 100 },
+            hAxis:{ title:'months'},
+            vAxis:{ title:'credits'},
+            legend:{ position:'none' }
+        };
+
+        var first = 0;
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                <%="[#{@plot.first}]"%>,
+                <% @plot.each do |row| %>
+                <%="[#{row}]"%>,
+                <% end %>
+            ]);
+
+            var map = {
+                    <% @map.each do |p| %>
+                    <%="#{p[0]}:#{p[1]}"%>,
+                    <% end %>
+                    };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            function selectHandler() {
+                var selectedItem = chart.getSelection()[0];
+                if (selectedItem) {
+                    var i = selectedItem['column']
+
+                    open("http://rage.jamo.fi/students/" + map[i], '_self');
+                }
+            }
+
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+
+            if (first == 0) {
+
+                $('#plus').click(function (e) {
+                    options['height'] = options['height'] + 20;
+                    options['chartArea']['height'] = options['chartArea']['height'] + 20;
+                    drawChart();
+                    e.preventDefault();
+                });
+
+                $('#minus').click(function (e) {
+                    options['height'] = options['height'] - 20;
+                    options['chartArea']['height'] = options['chartArea']['height'] - 20;
+                    drawChart();
+                    e.preventDefault();
+                });
+
+                $(document).keyup(function (e) {
+                    if (e.keyCode == 187) {
+                        options['height'] = options['height'] + 20;
+                        options['chartArea']['height'] = options['chartArea']['height'] + 20;
+                        drawChart();
+                    } else if (e.keyCode == 189) {
+                        options['height'] = options['height'] - 20;
+                        options['chartArea']['height'] = options['chartArea']['height'] - 20;
+                        drawChart();
+                    }
+
+                    e.preventDefault();
+                });
+
+                first++;
+            }
+
+            chart.draw(data, options);
+        }
+    </script>
+
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @course.name %>
+</p>
+
+<p>
+  <b>Term:</b>
+  <%= @course.term %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%= @course.date %>
+</p>
+
+<div class="btn">
+  <a href="#" id="plus">+</a>
+</div>
+
+<div class="btn">
+  <a href="#" id="minus">-</a>
+</div>
+
+<p><em>you can also use + and - of keyboard to scale the figure</em></p>
+
+<div id="chart_div"></div>
