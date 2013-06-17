@@ -25,6 +25,12 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def progress_since date, months
+    (1..months).inject([]) do |progr, m|
+      progr << credits_in_months_starting(m,date).to_i
+    end
+  end
+
   def member_of group
     groups.include? group
   end
@@ -130,13 +136,18 @@ class Student < ActiveRecord::Base
   end
 
   def credits_in_months_starting month, starting
-    if not month_credits.nil? and month_credits[month]
-      return month_credits[month]
-    end
-
     upto = starting + month.month
     cred = success_at_period(starting, upto).inject(0) do |sum, e|
       sum += e.credits if likely_a_course e
+      sum
+    end
+    cred
+  end
+
+  def tkt_credits_in_months_starting month, starting
+    upto = starting + month.month
+    cred = success_at_period(starting, upto).inject(0) do |sum, e|
+      sum += e.credits if e.code.starts_with? "58" and likely_a_course e
       sum
     end
     cred

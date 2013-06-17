@@ -5,34 +5,45 @@
         google.load("visualization", "1", {packages:["corechart"]});
         google.setOnLoadCallback(drawChart);
 
-        var initialHeight = 2000;
-
-        <% if @map.size>100 %>
-
-        <% else %>
-            initialHeight = 1000
-        <% end %>
+        var initialHeight = 600;
 
         var options = {
             height:initialHeight,
             chartArea:{ top:20, height:initialHeight - 100 },
             hAxis:{ title:'months'},
-            vAxis:{ title:'credits'},
+            vAxis:{ title:'credits', maxValue: <%= @max %> },
             legend:{ position:'none' }
         };
 
         var first = 0;
 
+        var success = true;
+
+        var map;
+
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                <%="[#{@plot.first}]"%>,
-                <% @plot.each do |row| %>
+            var data1 = google.visualization.arrayToDataTable([
+                <%="[#{@plot1.first}]"%>,
+                <% @plot1.each do |row| %>
                 <%="[#{row}]"%>,
                 <% end %>
             ]);
 
-            var map = {
-                    <% @map.each do |p| %>
+            var map1 = {
+                    <% @map1.each do |p| %>
+                    <%="#{p[0]}:#{p[1]}"%>,
+                    <% end %>
+                    };
+
+            var data2 = google.visualization.arrayToDataTable([
+                <%="[#{@plot2.first}]"%>,
+                <% @plot2.each do |row| %>
+                <%="[#{row}]"%>,
+                <% end %>
+            ]);
+
+            var map2 = {
+                    <% @map2.each do |p| %>
                     <%="#{p[0]}:#{p[1]}"%>,
                     <% end %>
                     };
@@ -66,6 +77,13 @@
                     e.preventDefault();
                 });
 
+                $('#change').click(function (e) {
+                    console.log("fuk")
+                    success = !success;
+                    drawChart();
+                    e.preventDefault();
+                });
+
                 $(document).keyup(function (e) {
                     if (e.keyCode == 187) {
                         options['height'] = options['height'] + 20;
@@ -83,7 +101,16 @@
                 first++;
             }
 
-            chart.draw(data, options);
+            if (success) {
+                $("#current").html("students who passed the course");
+                map = map1;
+                chart.draw(data1, options);
+            }
+            else {
+                $("#current").html("students who failed the course");
+                map = map2;
+                chart.draw(data2, options);
+            }
         }
     </script>
 
@@ -91,20 +118,21 @@
 
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Name:</b>
-  <%= @course.name %>
-</p>
+<h3><%= @course.name %> </h3>
 
 <p>
-  <b>Term:</b>
   <%= @course.term %>
 </p>
 
-<p>
-  <b>Date:</b>
-  <%= @course.date %>
-</p>
+<h4>
+  <div id="current"></div>
+</h4>
+
+<div class="btn">
+  <a href="#" id="change">change</a>
+</div>
+
+<p></p>
 
 <div class="btn">
   <a href="#" id="plus">+</a>
