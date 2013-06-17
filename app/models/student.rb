@@ -137,6 +137,7 @@ class Student < ActiveRecord::Base
 
   def credits_in_months_starting month, starting
     upto = starting + month.month
+
     cred = success_at_period(starting, upto).inject(0) do |sum, e|
       sum += e.credits if likely_a_course e
       sum

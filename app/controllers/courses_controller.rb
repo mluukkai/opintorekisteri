@@ -12,7 +12,6 @@ class CoursesController < ApplicationController
       date = @course.date
       months = @course.months_since
 
-      Rails.cache.exist? "#{@course} "
       @plot1 = plot_from @course.students_completed, date, months
       @map1 = map_from @course.students_completed
 
@@ -20,7 +19,7 @@ class CoursesController < ApplicationController
       @map2 = map_from @course.students_failed
 
       max1 = (@plot1.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
-      max2 = (@plot1.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
+      max2 = (@plot2.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
       @max = [max1,max2].max
 
     end
