@@ -1,3 +1,29 @@
+<% content_for :head do %>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script>
+
+        function Ctrl($scope) {
+
+            $scope.addTodo = function () {
+
+                $.ajax({
+                    url : "../courses.json",
+                    dataType : "json",
+                    data: { 'course' : $scope.search }
+                }).done($scope.do);
+
+                $scope.search = '';
+            };
+
+            $scope.do = function (data) {
+                console.log(data[1]);
+                $('.answer').text(data[1]);
+            }
+
+        }
+    </script>
+<% end %>
+
 <%= form_for(@course) do |f| %>
   <% if @course.errors.any? %>
     <div id="error_explanation">
@@ -20,14 +46,28 @@
     <%= f.text_field :term %>
   </div>
   <div class="field">
-    <%= f.label :date %><br />
+    Grading date<br />
     <%= f.date_select :date %>
   </div>
     <div class="field">
-      <%= f.label :date2 %><br />
+      Reneval exam date<br />
       <%= f.date_select :date2 %>
     </div>
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+
+
+<h2>Check grading/exam dates for a course</h2>
+<div ng-controller="Ctrl">
+
+  <form ng-submit="addTodo()">
+    <input type="text" ng-model="search" size="30"
+           placeholder="course name">
+    <input class="btn-primary" type="submit" value="search">
+  </form>
+
+  <div class="answer"></div>
+
+</div>

@@ -1,3 +1,45 @@
+<% content_for :head do %>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script>
+
+        function TodoCtrl($scope) {
+
+            $scope.addTodo = function () {
+                $('.answer').text('');
+
+                $.ajax({
+                    url : "courses.json",
+                    dataType : "json",
+                    data: { 'course' : $scope.search }
+                }).done($scope.do);
+
+                $scope.search = '';
+            };
+
+            $scope.do = function (data) {
+                console.log(data[1]);
+                $('.answer').text(data[1]);
+            }
+
+        }
+    </script>
+<% end %>
+
+<!--
+<h2>Credit dates for a course</h2>
+<div ng-controller="TodoCtrl">
+
+  <form ng-submit="addTodo()">
+    <input type="text" ng-model="search" size="30"
+           placeholder="course name">
+    <input class="btn-primary" type="submit" value="search">
+  </form>
+
+  <div class="answer"></div>
+
+</div>
+-->
+
 <h1>Courses</h1>
 
 <table class="table">
@@ -19,3 +61,5 @@
 <p></p>
 
 <%= link_to "create new course", new_course_url %>
+
+

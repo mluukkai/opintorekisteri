@@ -2,6 +2,16 @@ class CoursesController < ApplicationController
 
   def index
     @courses = Course.all.sort_by { |c| c.to_s }
+
+    if params[:course]
+      @dates = [1, Entry.where(:name => params[:course]).map{|m|m.date}.uniq.sort.join(" ")]
+    end
+
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @dates }
+    end
   end
 
   def show
@@ -18,11 +28,21 @@ class CoursesController < ApplicationController
       @plot2 = plot_from @course.students_failed, date, months
       @map2 = map_from @course.students_failed
 
-      max1 = (@plot1.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
-      max2 = (@plot2.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '')).split(',').map { |e| e.to_i }.max
-      @max = [max1,max2].max
-
+      #max1 = stripped(@plot1).split(',').map { |e| e.to_i }.max
+      #max2 = stripped(@plot2).split(',').map { |e| e.to_i }.max
+      @max = [max(@plot1), max(@plot2)].max
     end
+  end
+
+  def max plot
+    plot.flatten.to_s.gsub(/\"/, '').gsub(/\[/, '').gsub(/\]/, '').split(',').map { |e| e.to_i }.max
+  end
+
+  def dates
+    [
+        ['tira', '01.01.2010, 02.02.2011'],
+        ['ohpe', '22.03.2009, 03.01.2013'],
+    ]
   end
 
   def plot_from students, date, months
