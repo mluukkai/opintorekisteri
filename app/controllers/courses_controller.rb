@@ -7,7 +7,6 @@ class CoursesController < ApplicationController
       @dates = [1, Entry.where(:name => params[:course]).map{|m|m.date}.uniq.sort.join(" ")]
     end
 
-
     respond_to do |format|
       format.html
       format.json { render :json => @dates }

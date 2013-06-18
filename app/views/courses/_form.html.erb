@@ -2,24 +2,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script>
 
-        function Ctrl($scope) {
+        function Ctrl($scope, $http) {
 
-            $scope.addTodo = function () {
+            $scope.searchDates = function () {
 
-                $.ajax({
-                    url : "../courses.json",
+                $http({
+                    url: "../courses.json",
+                    method: "GET",
                     dataType : "json",
-                    data: { 'course' : $scope.search }
-                }).done($scope.do);
+                    params: { 'course' : $scope.search }
+                }).success(function(data, status, headers, config) {
+                    $scope.dates = data[1].split(" ");
+                    console.log(data[1].split(" "));
 
-                $scope.search = '';
+                }).error(function(data, status, headers, config) {
+                    $scope.status = status;
+                });
             };
-
-            $scope.do = function (data) {
-                console.log(data[1]);
-                $('.answer').text(data[1]);
-            }
-
         }
     </script>
 <% end %>
@@ -62,12 +61,14 @@
 <h2>Check grading/exam dates for a course</h2>
 <div ng-controller="Ctrl">
 
-  <form ng-submit="addTodo()">
+  <form ng-submit="searchDates()">
     <input type="text" ng-model="search" size="30"
            placeholder="course name">
     <input class="btn-primary" type="submit" value="search">
   </form>
 
-  <div class="answer"></div>
+  <p ng-repeat="d in dates">
+    <span>{{d}}</span>
+  </p>
 
 </div>
