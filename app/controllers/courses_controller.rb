@@ -27,8 +27,6 @@ class CoursesController < ApplicationController
       @plot2 = plot_from @course.students_failed, date, months
       @map2 = map_from @course.students_failed
 
-      #max1 = stripped(@plot1).split(',').map { |e| e.to_i }.max
-      #max2 = stripped(@plot2).split(',').map { |e| e.to_i }.max
       @max = [max(@plot1), max(@plot2)].max
     end
   end
