@@ -1,0 +1,36 @@
+<spinner></spinner>
+
+<h2>{{title}}</h2>
+
+<ul class="nav nav-pills">
+    <li data-ng-repeat="y in years" data-ng-class="{active:y==year}">
+        <a href="#/graph/{{id}}/{{y}}/{{order}}">{{y}}</a>
+    </li>
+</ul>
+
+<p>{{order}}</p>
+
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
+
+<div data-ng-show="student!=null">
+    <h3>{{student.student_number}}</h3>
+
+    <p>{{student.credits_total}} credits</p>
+
+    <table class="table">
+        <thead>
+        <td></td>
+        <td>grade</td>
+        <td>credits</td>
+        <td>date</td>
+        </thead>
+        <tr data-ng-repeat="entry in student.entries">
+            <td>{{entry.name}}</td>
+            <td>{{entry.grade}}</td>
+            <td>{{entry.credits}}</td>
+            <td>{{entry.creditDate}}</td>
+        </tr>
+    </table>
+</div>
+
+

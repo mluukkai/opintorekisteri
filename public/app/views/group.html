@@ -1,0 +1,18 @@
+<h2>{{group.name}}</h2>
+
+{{group.description}}
+
+<spinner></spinner>
+
+<table class="table">
+    <thead>
+    <th></th>
+    <th data-ng-repeat="key in keys">{{key}}</th>
+    </thead>
+
+    <tr data-ng-repeat="y in years">
+        <td><a href="#/graph/{{group.id}}/{{y['year']}}/credits_registered_year">graph</a></td>
+        <td data-ng-repeat="key in keys">{{y[key]}}</td>
+    </tr>
+</table>
+

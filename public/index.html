@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opintorekisteri 2.0</title>
+    <link href="/assets/bootstrap_and_overrides.css?body=1" media="all" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="app/app.js"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(function () {
+            angular.bootstrap(document.body, ['app']);
+        });
+    </script>
+</head>
+<body ng-controller="GroupsController">
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="container nav-collapse">
+                <ul class="nav">
+                    <li><a href="#/groups">groups</a></li>
+                    <li><a href="#/group/1">group</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<ng-view></ng-view>
+
+</body>
+
+<script src="/assets/jquery.js?body=1" type="text/javascript"></script>
+<script src="/assets/jquery_ujs.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-transition.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-alert.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-modal.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-tab.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-popover.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-button.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" type="text/javascript"></script>
+<script src="/assets/twitter/bootstrap/bootstrap-affix.js?body=1" type="text/javascript"></script>
+</html>

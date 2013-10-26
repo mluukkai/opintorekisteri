@@ -1,0 +1,12 @@
+<h2>groups</h2>
+
+<table class="table">
+    <thead>
+    <td></td>
+    <td></td>
+    </thead>
+    <tr data-ng-repeat="group in groups">
+        <td><a href="#/group/{{group.id}}">{{group.name}}</a></td>
+        <td>{{group.description}}</td>
+    </tr>
+</table>

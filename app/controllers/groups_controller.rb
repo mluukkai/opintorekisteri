@@ -4,6 +4,18 @@ class GroupsController < ApplicationController
   def index
     @groups = Group.all.sort_by { |g| g.name }
     @keys = @groups.first.aggregate(2012).keys
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render :json => form_answer }
+    end
+  end
+
+  def form_answer
+    v = {}
+    v[:groups] = @groups
+    v[:keys] = @keys
+    v
   end
 
   def touch

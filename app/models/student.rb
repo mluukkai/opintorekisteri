@@ -7,6 +7,8 @@ class Student < ActiveRecord::Base
   has_many :memberships
   has_many :groups, :through => :memberships
 
+  default_scope includes(:entries)
+
   def self.belonging_to started, attrib, attrib2
     return Student.includes(:entries).where("started == ? and attrib LIKE ?", started, "%#{attrib}%") if attrib2.nil? or attrib2.empty?
     #Student.includes(:entries).where("started == ? and attrib == ? and attrib2 == ?", started, attrib, attrib2)
@@ -16,7 +18,7 @@ class Student < ActiveRecord::Base
   def months_studied
     start_year = started[1..-1].to_i
     date1 = Date.new(start_year, 8, 1)
-    ((Date.today - date1)/30).to_i
+    (((Date.today+1.month - date1)/30).to_i)
   end
 
   def progress

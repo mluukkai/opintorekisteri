@@ -1,7 +1,6 @@
 Opintorekisteri::Application.routes.draw do
   resources :courses
 
-
   resources :paths
 
   resources :groups do
@@ -20,7 +19,10 @@ Opintorekisteri::Application.routes.draw do
 
   resources :entries
 
-  root :to => 'groups#index'
+  match 'api/student/:id'              => 'api#student'
+  match 'api/groups'                   => 'api#groups'
+  match 'api/groups/:id'               => 'api#group'
+  match 'api/groups/:id/:year/:sorted' => 'api#group_year'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

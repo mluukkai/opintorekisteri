@@ -9,6 +9,10 @@ class Group < ActiveRecord::Base
     Group.where :start_year => start_year
   end
 
+  def recent_aggregate
+    aggregate 2012
+  end
+
   def aggregate year
     if not Rails.cache.exist? "#{name} #{year}"
       Rails.cache.write "#{name} #{year}", Group.aggregate(students, year)
