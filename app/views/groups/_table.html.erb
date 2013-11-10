@@ -11,7 +11,7 @@
   </tr>
 
   <% @groups.select { |g| g.start_year == starting_year }.each do |group| %>
-      <% (group.start_year.. 2012).each do |year| %>
+      <% (group.start_year.. 2013).each do |year| %>
           <tr align="center">
             <td>
               <%= link_to group.name, group_path(group, :order => "credits_completed_year", :year => year), :rel => 'tooltip', :title => group.description %>
