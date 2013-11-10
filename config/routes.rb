@@ -19,6 +19,8 @@ Opintorekisteri::Application.routes.draw do
 
   resources :entries
 
+  root :to => 'groups#index'
+
   match 'api/student/:id'              => 'api#student'
   match 'api/groups'                   => 'api#groups'
   match 'api/groups/:id'               => 'api#group'
