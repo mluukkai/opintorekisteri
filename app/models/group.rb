@@ -10,7 +10,7 @@ class Group < ActiveRecord::Base
   end
 
   def recent_aggregate
-    aggregate 2012
+    aggregate 2013
   end
 
   def aggregate year

@@ -28,6 +28,16 @@ app.directive("spinner", function(){
     }
 });
 
+app.filter("underscoreless", function(){
+    return function(text){
+        while ( text.search("_")!=-1) {
+            text = text.replace("_"," ");
+        }
+
+        return text;
+    };
+});
+
 app.controller("GroupsController", function ($scope, $http) {
 
     $http.get('api/groups').
@@ -65,6 +75,7 @@ app.controller("GraphController", function ($scope, $http, $routeParams) {
 
     $scope.selectHandler = function(){
         var selectedItem = $scope.chart.getSelection()[0];
+
         if (selectedItem) {
             var i = $scope.data.getValue(selectedItem.row, 0);
             $scope.student = $scope.map[i];
@@ -83,8 +94,12 @@ app.controller("GraphController", function ($scope, $http, $routeParams) {
 
             $scope.title = data.group.name;
             $scope.order = $routeParams.order;
+            $scope.stats = data.stats;
 
-            console.log(data.group.start_year.class);
+            $scope.orders = [
+                "credits_total", "credits_registered_year",
+                "credits_completed_year", "tkt_credits_completed_year",
+                "math_credits_completed_year", "other_credits_completed_year"];
 
             $scope.years = [];
 
@@ -105,7 +120,7 @@ app.controller("GraphController", function ($scope, $http, $routeParams) {
             $scope.data = google.visualization.arrayToDataTable(plot);
 
             var options = {
-                title:'nopat',
+                title:'',
                 hAxis:{title:'', minValue:0, maxValue:15},
                 vAxis:{title:'Credits', minValue:0, maxValue:15},
                 legend:'none'
@@ -120,59 +135,4 @@ app.controller("GraphController", function ($scope, $http, $routeParams) {
             $scope.ready = true;
         });
 });
-
-
-//var app2 = angular.module('app2', []);
-//
-//app2.controller("MapController", function ($scope, $http) {
-//    $scope.ready = false;
-//
-//
-//    $scope.selectHandler = function(){
-//        var selectedItem = $scope.chart.getSelection()[0];
-//        if (selectedItem) {
-//            var i = $scope.data.getValue(selectedItem.row, 0);
-//            $scope.student = $scope.map[i];
-//            $scope.$apply();
-//            //open("http://rage.jamo.fi/students/" + map[i], '_self');
-//
-//            $http.get('api/student/' + $scope.map[i]).
-//                success(function (data, status, headers, config) {
-//                    $scope.student = data;
-//                });
-//        }
-//    }
-//
-//    $http.get('api/groups/25/2012').
-//        success(function (data, status, headers, config) {
-//            $scope.plot = data.plot;
-//
-//            var plot = [];
-//            angular.forEach(data.plot, function (e) {
-//                plot.push([e[0], e[1]]);
-//            });
-//
-//            $scope.map = {};
-//            angular.forEach(data.plot, function (e) {
-//                $scope.map[e[0]] = e[2];
-//            });
-//
-//            $scope.data = google.visualization.arrayToDataTable(plot);
-//
-//            var options = {
-//                title:'nopat',
-//                hAxis:{title:'', minValue:0, maxValue:15},
-//                vAxis:{title:'Credits', minValue:0, maxValue:15},
-//                legend:'none'
-//            };
-//
-//            $scope.chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
-//
-//            google.visualization.events.addListener($scope.chart, 'select', $scope.selectHandler);
-//
-//            $scope.chart.draw($scope.data, options);
-//
-//            $scope.ready = true;
-//        });
-//});
 

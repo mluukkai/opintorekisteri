@@ -8,9 +8,60 @@
     </li>
 </ul>
 
-<p>{{order}}</p>
+<ul class="nav nav-pills">
+    <li data-ng-repeat="o in orders" data-ng-class="{active:o==order}">
+        <a href="#/graph/{{id}}/{{year}}/{{o}}">{{o | underscoreless}}</a>
+    </li>
+</ul>
 
-<div id="chart_div" style="width: 900px; height: 500px;"></div>
+<div class="container">
+    <div class="row">
+
+        <div class="span3" data-ng-show="ready">
+            <h3>stats</h3>
+            <table class="table">
+                <tr>
+                    <td>students</td>
+                    <td>{{stats.students}}</td>
+                </tr>
+                <tr>
+                    <td>fiftyfive</td>
+                    <td>{{stats.fiftyfive}}</td>
+                </tr>
+                <tr>
+                    <td>registered credits</td>
+                    <td>{{stats.registered}}</td>
+                </tr>
+                <tr>
+                    <td>credits completed</td>
+                    <td>{{stats.completed}}</td>
+                </tr>
+                <tr>
+                    <td>tktl</td>
+                    <td>{{stats.tkt}}</td>
+                </tr>
+                <tr>
+                    <td>math</td>
+                    <td>{{stats.math}}</td>
+                </tr>
+                <tr>
+                    <td>other</td>
+                    <td>{{stats.other}}</td>
+                </tr>
+                <tr>
+                    <td>grade average</td>
+                    <td>{{stats.grade}}</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="span9">
+            <div id="chart_div" style="width: 900px; height: 500px;"></div>
+        </div>
+    </div>
+</div>
+
 
 <div data-ng-show="student!=null">
     <h3>{{student.student_number}}</h3>
@@ -24,7 +75,7 @@
         <td>credits</td>
         <td>date</td>
         </thead>
-        <tr data-ng-repeat="entry in student.entries">
+        <tr data-ng-repeat="entry in student.entries | orderBy:date">
             <td>{{entry.name}}</td>
             <td>{{entry.grade}}</td>
             <td>{{entry.credits}}</td>
