@@ -72,7 +72,7 @@
           <% end %>
         </tr>
 
-        <% (@group.start_year..2013).each do |y| %>
+        <% (@group.start_year..Group.current_year).each do |y| %>
             <tr class="<%= "success" if y == @year %>">
               <% @aggregate[2012].keys.each do |key| %>
                   <% if key==:year %>

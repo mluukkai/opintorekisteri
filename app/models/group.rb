@@ -9,6 +9,10 @@ class Group < ActiveRecord::Base
     Group.where :start_year => start_year
   end
 
+  def self.current_year
+    2013
+  end
+
   def recent_aggregate
     aggregate 2013
   end

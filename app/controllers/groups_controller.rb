@@ -34,7 +34,7 @@ class GroupsController < ApplicationController
 
       if not Rails.cache.exist? "#{@group.name} stats"
         aggregate = {}
-        (@group.start_year..2012).each do |y|
+        (@group.start_year..Group.current_year).each do |y|
           aggregate[y] = @group.aggregate y
         end
         Rails.cache.write "#{@group.name} stats", aggregate
