@@ -51,11 +51,11 @@ class Group < ActiveRecord::Base
 
     {
         :year => year,
-        :registered => (credits_year/active_students).round(2),
-        :completed => (credits_completed_year/active_students).round(2),
-        :tkt => (credits_tkt/active_students).round(2),
-        :math => (credits_math/active_students).round(2),
-        :other => ((credits_completed_year-credits_math-credits_tkt)/active_students).round(2),
+        :registered => active_students==0 ? 0 : (credits_year/active_students).round(2),
+        :completed => active_students==0 ? 0 : (credits_completed_year/active_students).round(2),
+        :tkt => active_students==0 ? 0 : (credits_tkt/active_students).round(2),
+        :math => active_students==0 ? 0 : (credits_math/active_students).round(2),
+        :other => active_students==0 ? 0 : ((credits_completed_year-credits_math-credits_tkt)/active_students).round(2),
         :students => students.count,
         :fiftyfive => fiftyfive,
         :zeros => zeros,
