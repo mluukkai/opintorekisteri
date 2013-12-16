@@ -23,10 +23,18 @@
             var data = [];
 
             <% (0..@plots.length-1).each do |i| %>
+
+                var heder = [];
+
+                <% @plots[i].first.split(',').each do |p| %>
+                    heder.push('');
+                <% end %>
+
                 data.push(google.visualization.arrayToDataTable([
+                    heder,
                     <%="[#{@plots[i].first}]"%>,
                     <% @plots[i].each do |row| %>
-                    <%="[#{row}]"%>,
+                        <%="[#{row}]"%>,
                     <% end %>
                 ]));
             <% end %>
